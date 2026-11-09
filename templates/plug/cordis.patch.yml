@@ -1,0 +1,7 @@
+# Loader rows this bundle adds to the profile. A user override of `config`
+# goes in the profile's own cordis.patch.yml under the same `id`.
+- insert:
+    - id: __ENTRY__
+      name: '__PACKAGE__'
+      config:
+        command: __COMMAND__

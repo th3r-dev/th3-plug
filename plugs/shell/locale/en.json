@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Shell command",
+    "description": "Start a message with ! (or use /sh <command>) to run a shell command on this machine instantly, with zsh completions and history suggestions as you type. The command and its output never go to the AI agent."
+  }
+}

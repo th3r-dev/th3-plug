@@ -1,0 +1,13 @@
+# Loader rows this bundle adds to the profile. A user override of `config`
+# goes in the profile's own cordis.patch.yml under the same `id`.
+- insert:
+    - id: th3-shell
+      name: '@th3-plug/shell'
+      config:
+        name: sh                  # slash command: /sh <command>
+        bang: true                # also run messages that start with !
+        autocomplete: true        # zsh completions + history while typing !
+        completeTimeoutMs: 5000
+        timeoutMs: 120000         # kill a command after this long (0 = never)
+        maxOutputChars: 20000     # keep the last N characters of output
+        loginShell: true          # run as `$SHELL -lc` so your PATH applies

@@ -1,0 +1,22 @@
+{
+  "name": "th3-plug",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DeepSeek Harness plugins (plugs) by th3r-dev.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "new": "node scripts/new-plug.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node --test plugs/*/test/*.test.mjs",
+    "verify": "node scripts/check.mjs && node --test plugs/*/test/*.test.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/th3r-dev/th3-plug.git"
+  },
+  "homepage": "https://github.com/th3r-dev/th3-plug#readme"
+}
