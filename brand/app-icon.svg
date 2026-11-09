@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="th3-plug">
+  <!-- th3-plug app icon: the th3r-dev split octagon (gold | ink) holding a plug whose face is a shell prompt. -->
+  <g transform="translate(0 0) scale(1.0)">
+  <defs><clipPath id="oct-a"><path d="M483.3 316.1 Q483.3 350.1 459.2 374.2 L374.2 459.2 Q350.1 483.3 316.1 483.3 L195.9 483.3 Q161.9 483.3 137.8 459.2 L52.8 374.2 Q28.7 350.1 28.7 316.1 L28.7 195.9 Q28.7 161.9 52.8 137.8 L137.8 52.8 Q161.9 28.7 195.9 28.7 L316.1 28.7 Q350.1 28.7 374.2 52.8 L459.2 137.8 Q483.3 161.9 483.3 195.9 Z"/></clipPath></defs>
+  <g clip-path="url(#oct-a)">
+    <rect x="0" y="0" width="256" height="512" fill="#F2C33F"/>
+    <rect x="256" y="0" width="256" height="512" fill="#182028"/>
+  </g>
+  <path d="M453.7 309.9 Q453.7 337.9 433.9 357.7 L357.7 433.9 Q337.9 453.7 309.9 453.7 L202.1 453.7 Q174.1 453.7 154.3 433.9 L78.1 357.7 Q58.3 337.9 58.3 309.9 L58.3 202.1 Q58.3 174.1 78.1 154.3 L154.3 78.1 Q174.1 58.3 202.1 58.3 L309.9 58.3 Q337.9 58.3 357.7 78.1 L433.9 154.3 Q453.7 174.1 453.7 202.1 Z" fill="none" stroke="#C0841F" stroke-width="6" opacity="0.6"/>
+  <g transform="translate(0 0) scale(1.0)">
+    <rect x="200" y="118" width="34" height="96" rx="12" fill="#FBFAF6"/>
+    <rect x="278" y="118" width="34" height="96" rx="12" fill="#FBFAF6"/>
+    <path d="M256 380 V412 Q256 446 222 446 H170" fill="none" stroke="#FBFAF6" stroke-width="30" stroke-linecap="round"/>
+    <path d="M160 206 H352 V300 A80 80 0 0 1 272 380 H240 A80 80 0 0 1 160 300 Z" fill="#FBFAF6" stroke="#182028" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M206 262 L238 290 L206 318" fill="none" stroke="#182028" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M258 318 H306" fill="none" stroke="#182028" stroke-width="20" stroke-linecap="round"/>
+  </g>
+</g>
+</svg>

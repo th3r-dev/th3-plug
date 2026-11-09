@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" width="1280" height="400" role="img" aria-label="th3-plug: plugs for DeepSeek Harness">
+  <rect width="1280" height="400" fill="#182028"/>
+  <rect width="14" height="400" fill="#F2C33F"/>
+  <rect x="878" y="68" width="13" height="13" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(7 884 74)"/>
+  <rect x="999" y="148" width="7" height="7" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(46 1002 152)"/>
+  <rect x="721" y="173" width="7" height="7" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(8 725 176)"/>
+  <rect x="936" y="314" width="7" height="7" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(20 940 318)"/>
+  <rect x="1047" y="355" width="12" height="12" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(36 1053 361)"/>
+  <rect x="1240" y="29" width="15" height="15" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(26 1247 37)"/>
+  <rect x="780" y="58" width="9" height="9" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(73 784 62)"/>
+  <rect x="798" y="223" width="12" height="12" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(34 804 229)"/>
+  <rect x="1005" y="39" width="7" height="7" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(19 1009 43)"/>
+  <rect x="1078" y="169" width="9" height="9" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(53 1082 174)"/>
+  <rect x="949" y="121" width="14" height="14" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(63 956 128)"/>
+  <rect x="834" y="221" width="11" height="11" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(79 840 227)"/>
+  <rect x="1102" y="116" width="16" height="16" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(11 1110 124)"/>
+  <rect x="933" y="289" width="8" height="8" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(44 936 293)"/>
+  <rect x="719" y="254" width="14" height="14" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(52 726 261)"/>
+  <rect x="1184" y="126" width="13" height="13" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(53 1191 133)"/>
+  <rect x="1019" y="177" width="14" height="14" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(85 1026 184)"/>
+  <rect x="964" y="256" width="7" height="7" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(63 968 259)"/>
+  <rect x="1057" y="370" width="14" height="14" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(26 1064 378)"/>
+  <rect x="915" y="258" width="6" height="6" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(42 919 261)"/>
+  <rect x="794" y="59" width="7" height="7" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(69 797 62)"/>
+  <rect x="771" y="104" width="10" height="10" rx="2" fill="#F2C33F" opacity="0.16" transform="rotate(78 776 109)"/>
+  <g transform="translate(60.0 60.0) scale(0.546875)">
+  <defs><clipPath id="oct-b"><path d="M483.3 316.1 Q483.3 350.1 459.2 374.2 L374.2 459.2 Q350.1 483.3 316.1 483.3 L195.9 483.3 Q161.9 483.3 137.8 459.2 L52.8 374.2 Q28.7 350.1 28.7 316.1 L28.7 195.9 Q28.7 161.9 52.8 137.8 L137.8 52.8 Q161.9 28.7 195.9 28.7 L316.1 28.7 Q350.1 28.7 374.2 52.8 L459.2 137.8 Q483.3 161.9 483.3 195.9 Z"/></clipPath></defs>
+  <g clip-path="url(#oct-b)">
+    <rect x="0" y="0" width="256" height="512" fill="#F2C33F"/>
+    <rect x="256" y="0" width="256" height="512" fill="#182028"/>
+  </g>
+  <path d="M483.3 316.1 Q483.3 350.1 459.2 374.2 L374.2 459.2 Q350.1 483.3 316.1 483.3 L195.9 483.3 Q161.9 483.3 137.8 459.2 L52.8 374.2 Q28.7 350.1 28.7 316.1 L28.7 195.9 Q28.7 161.9 52.8 137.8 L137.8 52.8 Q161.9 28.7 195.9 28.7 L316.1 28.7 Q350.1 28.7 374.2 52.8 L459.2 137.8 Q483.3 161.9 483.3 195.9 Z" fill="none" stroke="#4A5562" stroke-width="8"/>
+  <path d="M453.7 309.9 Q453.7 337.9 433.9 357.7 L357.7 433.9 Q337.9 453.7 309.9 453.7 L202.1 453.7 Q174.1 453.7 154.3 433.9 L78.1 357.7 Q58.3 337.9 58.3 309.9 L58.3 202.1 Q58.3 174.1 78.1 154.3 L154.3 78.1 Q174.1 58.3 202.1 58.3 L309.9 58.3 Q337.9 58.3 357.7 78.1 L433.9 154.3 Q453.7 174.1 453.7 202.1 Z" fill="none" stroke="#C0841F" stroke-width="6" opacity="0.6"/>
+  <g transform="translate(0 0) scale(1.0)">
+    <rect x="200" y="118" width="34" height="96" rx="12" fill="#FBFAF6"/>
+    <rect x="278" y="118" width="34" height="96" rx="12" fill="#FBFAF6"/>
+    <path d="M256 380 V412 Q256 446 222 446 H170" fill="none" stroke="#FBFAF6" stroke-width="30" stroke-linecap="round"/>
+    <path d="M160 206 H352 V300 A80 80 0 0 1 272 380 H240 A80 80 0 0 1 160 300 Z" fill="#FBFAF6" stroke="#182028" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M206 262 L238 290 L206 318" fill="none" stroke="#182028" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M258 318 H306" fill="none" stroke="#182028" stroke-width="20" stroke-linecap="round"/>
+  </g>
+</g>
+  <text x="396" y="188" fill="#FBFAF6" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI Variable Display', 'Segoe UI', Helvetica, Arial, sans-serif" font-weight="700" font-size="96" letter-spacing="-0.02em">th3<tspan fill="#F2C33F">-</tspan>plug</text>
+  <text x="396" y="240" fill="#A9B2BC" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI Variable Display', 'Segoe UI', Helvetica, Arial, sans-serif" font-weight="500" font-size="31">Plugs for DeepSeek Harness.</text>
+  <g transform="translate(396 269)">
+    <rect width="553" height="60" rx="30" fill="#2A333D"/>
+    <text x="29" y="40" fill="#FBFAF6" font-family="ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace" font-size="25"><tspan fill="#F2C33F">!</tspan>git status<tspan fill="#7D8792">   runs here, no agent</tspan></text>
+  </g>
+</svg>

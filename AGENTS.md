@@ -35,6 +35,8 @@ npm run verify                # check + test; run before every install
 - New behaviour gets a `node:test` case in `plugs/<name>/test/` using a fake
   `ctx` (see `plugs/shell/test/host.test.mjs`).
 - Bump the plug's `version` on every change you install.
+- Icons follow the plug-icon family in [brand/BRAND.md](brand/BRAND.md#plug-icons).
+  Brand PNGs are generated: edit `brand/*.svg`, then `npm run brand`.
 
 ## Installing a change
 

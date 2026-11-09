@@ -1,3 +1,5 @@
+<img src="icon.svg" width="64" align="right" alt="">
+
 # __NAME__ — __TITLE__
 
 `__PACKAGE__`: __DESCRIPTION__

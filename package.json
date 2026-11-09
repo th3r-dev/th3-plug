@@ -12,7 +12,8 @@
     "new": "node scripts/new-plug.mjs",
     "check": "node scripts/check.mjs",
     "test": "node --test plugs/*/test/*.test.mjs",
-    "verify": "node scripts/check.mjs && node --test plugs/*/test/*.test.mjs"
+    "verify": "node scripts/check.mjs && node --test plugs/*/test/*.test.mjs",
+    "brand": "node scripts/render-brand.mjs"
   },
   "repository": {
     "type": "git",

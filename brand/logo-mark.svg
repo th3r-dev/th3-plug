@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="96 96 320 368" role="img" aria-label="th3-plug">
+  <!-- th3-plug mark: the plug alone. Gold body, ink prompt; readable on light and dark backgrounds. -->
+  <g transform="translate(0 0) scale(1.0)">
+    <rect x="200" y="118" width="34" height="96" rx="12" fill="#C0841F"/>
+    <rect x="278" y="118" width="34" height="96" rx="12" fill="#C0841F"/>
+    <path d="M256 380 V412 Q256 446 222 446 H170" fill="none" stroke="#F2C33F" stroke-width="30" stroke-linecap="round"/>
+    <path d="M160 206 H352 V300 A80 80 0 0 1 272 380 H240 A80 80 0 0 1 160 300 Z" fill="#F2C33F"/>
+    <path d="M206 262 L238 290 L206 318" fill="none" stroke="#182028" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M258 318 H306" fill="none" stroke="#182028" stroke-width="20" stroke-linecap="round"/>
+  </g>
+</svg>

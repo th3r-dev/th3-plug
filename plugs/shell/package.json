@@ -1,6 +1,6 @@
 {
   "name": "@th3-plug/shell",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "description": "Run a local shell command from the DeepSeek Harness composer with ! or /sh, without calling the AI agent, with zsh completions and history suggestions while typing.",
   "license": "MIT",

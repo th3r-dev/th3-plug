@@ -1,3 +1,5 @@
+<img src="icon.svg" width="64" align="right" alt="">
+
 # shell — run local commands from the composer
 
 `@th3-plug/shell` lets you run a shell command on your own machine from the
