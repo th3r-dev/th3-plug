@@ -16,9 +16,9 @@
 
 ## Plugs
 
-| | Plug | What it does |
-|---|---|---|
-| <img src="plugs/shell/icon.svg" width="28" alt=""> | [**shell**](plugs/shell/README.md) | Run a command on your machine from the chat box with `!git status` or `/sh git status`. The AI agent is never called. zsh completions and shell history pop up while you type; the output comes back as a terminal block with the exit code and a Copy button. Package `@th3-plug/shell`. |
+| Plug | What it does |
+|---|---|
+| <img src="plugs/shell/icon.svg" width="20" height="20" alt="" align="top">&nbsp;[**shell**](plugs/shell/README.md) | Run a command on your machine from the chat box with `!git status` or `/sh git status`. The AI agent is never called. zsh completions and shell history pop up while you type; the output comes back as a terminal block with the exit code and a Copy button. Package `@th3-plug/shell`. |
 
 ## Quick start
 
