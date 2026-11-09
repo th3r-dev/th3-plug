@@ -68,4 +68,6 @@ System fonts, no downloads:
 - Display / UI: `-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display", "Segoe UI", Helvetica, Arial, sans-serif`
 - Code: `ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace`
 
+Each plug icon is also rendered to `plugs/<name>/assets/icon-180.png` (marketplace tile).
+
 Machine-readable tokens: [`tokens.json`](tokens.json).

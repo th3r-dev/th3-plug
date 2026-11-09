@@ -3,6 +3,18 @@
   "version": "1.2.1",
   "private": true,
   "description": "Run a local shell command from the DeepSeek Harness composer with ! or /sh, without calling the AI agent, with zsh completions and history suggestions while typing.",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "shell",
+    "zsh"
+  ],
+  "homepage": "https://github.com/th3r-dev/th3-plug/tree/main/plugs/shell#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/th3r-dev/th3-plug.git",
+    "directory": "plugs/shell"
+  },
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -18,10 +30,13 @@
     "cordis.patch.yml",
     "locale/*.json",
     "icon.svg",
+    "assets/*.png",
     "README.md"
   ],
   "dsh": {
-    "bundle": { "patch": "./cordis.patch.yml" },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
     "client": {
       "platform": "web",
       "immediately": true,
