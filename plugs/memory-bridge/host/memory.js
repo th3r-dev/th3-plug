@@ -19,7 +19,8 @@ const isDir = (path) => { try { return statSync(path).isDirectory() } catch { re
 const readText = (path) => { try { return readFileSync(path, 'utf8') } catch { return undefined } }
 const readJson = (path) => { const text = readText(path); if (text === undefined) return undefined; try { return JSON.parse(text) } catch { return undefined } }
 
-export const sha1 = text => createHash('sha1').update(text).digest('hex')
+/** Content identity for duplicate suppression; never used for security. */
+export const contentDigest = text => createHash('sha256').update(text).digest('hex')
 export const byteLength = text => Buffer.byteLength(text, 'utf8')
 
 /** Claude Code's project folder name: every character outside [A-Za-z0-9] becomes `-`. */
@@ -169,7 +170,7 @@ export function listNotes(dir) {
   try { entries = readdirSync(dir) } catch { return [] }
   return entries
     .filter(entry => entry.endsWith('.md') && entry !== INDEX_FILE && !entry.startsWith('.'))
-    .sort()
+    .sort((a, b) => a.localeCompare(b))
     .map((file) => {
       const { data } = parseFrontmatter(readText(join(dir, file)) ?? '')
       const meta = typeof data.metadata === 'object' && data.metadata ? data.metadata : {}
@@ -277,7 +278,7 @@ const stripComments = text => text.replace(/```[\s\S]*?```|<!--[\s\S]*?-->/g, m 
 function walkMarkdown(dir, out = [], depth = 0) {
   if (depth > 4) return out
   let entries = []
-  try { entries = readdirSync(dir).sort() } catch { return out }
+  try { entries = readdirSync(dir).sort((a, b) => a.localeCompare(b)) } catch { return out }
   for (const entry of entries) {
     if (entry.startsWith('.')) continue
     const path = join(dir, entry)
@@ -308,7 +309,7 @@ export function claudeInstructions({ root, configDir, home = homedir(), env = pr
   const dshHome = env.DSH_HOME || join(home, '.dsh')
   const agentsHome = env.DSH_AGENTS_HOME || join(home, '.agents')
   const loaded = new Set([join(dshHome, 'AGENTS.md'), join(agentsHome, 'AGENTS.md'), join(root, 'AGENTS.md'), join(root, 'CLAUDE.md')]
-    .map(readText).filter(text => text !== undefined).map(text => sha1(text.trim())))
+    .map(readText).filter(text => text !== undefined).map(text => contentDigest(text.trim())))
   const files = []
   const scoped = []
   const skipped = []
@@ -323,8 +324,8 @@ export function claudeInstructions({ root, configDir, home = homedir(), env = pr
     }
     content = stripComments(content).trim()
     if (!content) return
-    if (loaded.has(sha1(raw.trim())) || loaded.has(sha1(content))) { skipped.push({ path, why: 'the Harness already loads the same text' }); return }
-    loaded.add(sha1(content))
+    if (loaded.has(contentDigest(raw.trim())) || loaded.has(contentDigest(content))) { skipped.push({ path, why: 'the Harness already loads the same text' }); return }
+    loaded.add(contentDigest(content))
     files.push({ path, display: displayPath(path, root, home), content })
   }
   add(join(configDir, 'CLAUDE.md'))

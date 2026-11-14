@@ -50,7 +50,7 @@ function skillNames(root) {
     if (isDir(path) && isFile(join(path, 'SKILL.md'))) names.push(entry)
     else if (entry.endsWith('.md') && isFile(path) && entry !== 'README.md' && entry !== 'VENDORED.md') names.push(entry.slice(0, -3))
   }
-  return names.sort()
+  return names.sort((a, b) => a.localeCompare(b))
 }
 
 /** Directories from the project root down to `cwd`, broad to specific. */
