@@ -9,12 +9,38 @@ step, no dependencies. Read [README.md](README.md) for the layout and
 [docs/dsh-notes.md](docs/dsh-notes.md) for the Harness APIs and traps before
 changing a plug.
 
+## Git workflow
+
+`main` is protected. It changes only through a merged pull request, so every
+change, however small, happens on a branch. This applies to agents and humans
+alike, including one-line documentation fixes.
+
+1. Branch off `main`:
+   `git switch main && git pull --ff-only && git switch -c feat/<plug>-<topic>`
+   (or `fix/…`, `docs/…`). One topic per branch; several plugs that ship
+   together may share one branch.
+2. Commit on that branch. Subject in the imperative, body says why.
+3. `git push -u origin <branch>`, then open the PR:
+   `gh pr create --base main --fill`. Report the PR URL.
+4. Land the work by merging the PR — the user merges, or an agent runs
+   `gh pr merge --squash` when asked. Never `git push origin main`, never
+   `git commit` on `main`.
+
+A PreToolUse hook enforces this: [`.claude/settings.json`](.claude/settings.json)
+runs [`scripts/git-guard.mjs`](scripts/git-guard.mjs) before every Bash call.
+It refuses `commit`, `rebase`, `cherry-pick`, `revert`, `git am` and any
+non-fast-forward `merge` on `main` / `master`, and every `git push` that lands
+on them (`--all`, `--mirror`, `HEAD:main` included). Claude Code runs the hook
+directly; DeepSeek Harness runs the same hook through the
+[agent-bridge](plugs/agent-bridge/README.md) plug. When it blocks a command,
+create the branch — do not look for a way around it.
+
 ## Commands
 
 ```bash
 npm run new -- <name> [--web] [--title "..."] [--description "..."] [--command cmd]
 npm run check [-- <name>]     # manifest, exports, patch, locale, icon, syntax
-npm test                      # node --test plugs/*/test/*.test.mjs
+npm test                      # node --test plugs/*/test/*.test.mjs scripts/*.test.mjs
 npm run verify                # check + test; run before every install
 ```
 
