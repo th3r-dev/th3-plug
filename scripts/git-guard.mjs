@@ -21,9 +21,8 @@
  *
  * Set `TH3_GIT_GUARD_ROOT` to guard a different repository (the tests use it).
  */
-import { execFileSync } from 'node:child_process'
-import { readFileSync, realpathSync } from 'node:fs'
-import { dirname, isAbsolute, resolve } from 'node:path'
+import { readFileSync, realpathSync, statSync } from 'node:fs'
+import { dirname, isAbsolute, join, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
@@ -105,18 +104,46 @@ export function nestedCommand(words) {
   return words[flag + 1]
 }
 
-/** The checked-out branch of `dir`, or undefined outside a repository. */
-export function branchOf(dir) {
-  try {
-    return execFileSync('git', ['-C', dir, 'rev-parse', '--abbrev-ref', 'HEAD'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim()
-  } catch {
-    return undefined
+/**
+ * Find the working tree and git directory that own `dir`, by walking up to the
+ * nearest `.git` (a directory, or the `gitdir:` file a worktree and submodule
+ * use). Reading those files keeps the hook off `PATH` and off a child process.
+ * @param {string} dir - absolute directory to start from.
+ * @returns {{ root: string, gitDir: string } | undefined} paths of the working tree and its git directory.
+ */
+export function repositoryOf(dir) {
+  let current = real(dir)
+  for (;;) {
+    const dotGit = join(current, '.git')
+    let stat
+    try { stat = statSync(dotGit) } catch { stat = undefined }
+    if (stat?.isDirectory()) return { root: current, gitDir: dotGit }
+    if (stat?.isFile()) {
+      try {
+        const found = /^gitdir:\s*(.+)$/m.exec(readFileSync(dotGit, 'utf8'))
+        if (found !== null) return { root: current, gitDir: resolve(current, found[1].trim()) }
+      } catch { /* unreadable: treat the directory as a plain folder */ }
+      return { root: current, gitDir: dotGit }
+    }
+    const parent = dirname(current)
+    if (parent === current) return undefined
+    current = parent
   }
 }
 
-function repositoryOf(dir) {
+/**
+ * The checked-out branch of `dir`: the ref in HEAD, `HEAD` when detached, or
+ * undefined outside a repository.
+ * @param {string} dir - absolute directory.
+ * @returns {string | undefined} branch name, `HEAD`, or undefined.
+ */
+export function branchOf(dir) {
+  const repository = repositoryOf(dir)
+  if (repository === undefined) return undefined
   try {
-    return execFileSync('git', ['-C', dir, 'rev-parse', '--show-toplevel'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim()
+    const head = readFileSync(join(repository.gitDir, 'HEAD'), 'utf8').trim()
+    const ref = /^ref:\s*refs\/heads\/(.+)$/.exec(head)
+    return ref === null ? 'HEAD' : ref[1]
   } catch {
     return undefined
   }
@@ -170,7 +197,7 @@ function inspect(command, startDir, guarded, depth) {
     if (git === undefined) continue
     const base = git.dir === undefined ? dir : real(resolve(dir, git.dir))
     const repository = repositoryOf(base)
-    if (repository === undefined || real(repository) !== guarded) continue
+    if (repository === undefined || repository.root !== guarded) continue
     const branch = branchOf(base)
     if (branch === undefined || branch === 'HEAD') continue
     const onProtected = PROTECTED.has(branch)
