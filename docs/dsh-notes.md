@@ -56,6 +56,39 @@ source of truth.
 | Suggestion menu rows | Client `ctx.inputTriggers.registerSource({ trigger, name, order, candidates(session, { query, signal }), onPick })` | `onPick` returns `{ text }` to replace the hit span. Rows may carry `section` (heading), `description`, `label`. |
 | Translations | `ctx.locale.register(ns, { en: {...}, th: {...} })`, `ctx.locale.bind(ns)` | use **your own** namespace — see traps |
 
+## APIs the retry plug uses
+
+| Need | API | Notes |
+|---|---|---|
+| Change images before a request | Host `ctx.on('agent/pre-step', async (payload, next) => …)` | the decision's `messages` are **only the messages claimed for this step** (new prompts and injected context), not the whole derived history |
+| Survive a provider refusal | Host `ctx.on('agent/request-error', async (payload, next) => …)` | return `{ kind: 'retry' }` after recording a durable fix; return `next()` for anything else |
+| A smaller copy of a stored image | `ctx.get('attachments').readImageRequest(ref, { width, height, maxBytes })` then `.saveImages([{ mediaType, data }])` | the mounted attachment backend owns the encoder (sharp), so a plug needs no image dependency; results are content-addressed |
+| Leave a stored image out of a request | `session.append('image/offload', { targets: [{ seq, imageIndexes }] })` | only when `ctx.get('sessions').messageProjections` contains `image/offload` (`dsh-compaction-image-offload`); an uninterpreted event makes the session refuse to reopen |
+| The live agent of a session | `ctx.get('agents').get(sessionId)`, else `ctx.get('sessionController').resolveAgent(sessionId)` | the registry only holds live agents; the controller resumes a cold one |
+| The durable conversation | `agent.session.deriveMessages()` (identities, roles, block content) and `agent.session.surface.nodes` + `deriveEventMessage(event)` for positions | `snapshotEvents()` and `eventAt()` still work but are deprecated for new callers |
+| Send a prompt again | `agent.followup({ id, role: 'user', content, source: { kind: 'user' } })` | an inbox message needs an identity; `followup` wakes the agent, `inject` does not |
+| An authenticated route for the page | Host `ctx.inject(['connection'], s => s.connection.fetch.register({ path, methods: ['POST'], requestBody: 'buffered', fetch }))` | `await request.json()` works with a buffered body; only the owner peer reaches an exact route |
+| Buttons under an assistant reply | Client `ctx.slots.inject('conversation.chat.assistant-actions', () => ctx.slots.register({ name, id, order, locale, inject }, Component))` | the entry receives `{ messageId }` only; the same slot is a `list`, so `id` + `order` decide placement |
+| The turn a reply closes | Client `conversation.chat.turnTail` (props `{ turn, seq, openFile }`) | the only chat slot that hands out a log position; it renders above the action row |
+
+## APIs the live-jobs plug uses
+
+| Need | API | Notes |
+|---|---|---|
+| The session's background jobs | Client `ctx.jobs.state` + `ctx.jobs.watchRows(sessionId)` | the model behind the session-header job list; `watchRows` returns a release and the client ref-counts viewers |
+| One job's live output | Client `ctx.jobs.observe(sessionId, jobId)` | a non-consuming `job.follow` stream; `state.observed[jobId]` holds `{ text, gapBefore, streaming, error? }` — the model's own read cursor never moves |
+| Stop a job as the human | Client `ctx.jobs.kill(sessionId, jobId)` | resolves to a Remote result; the owning agent still gets its completion notice, reason `cancelled by the user` |
+| A component hook in a slot entry | `inject: () => ({ hooks: { jobs: ctx.jobs.state }, … })` | every `hooks` key `x` arrives as a `use<X>` selector prop (`jobs` → `useJobs`) |
+| A card inside the conversation, per completed turn | Client `conversation.chat.turnTail` (list, session scope) | entries receive `{ turn: TurnLocation, seq, openFile }`; `turn.turn` is the number. The list sits above the turn's action row; a fresh `id` adds an entry |
+| A strip above the composer | Client `conversation.input.dock` (list, session scope) | entries receive `{ session, input }` plus standard props; take your width from the composer variables (`--dsh-composer-card-max-width`, `--dsh-composer-dock-inset`, `--dsh-composer-side-clearance`) and `margin: 0 auto`, like the todo dock |
+| One plug, two seats, one config | Register both slots and gate each component on `config.position` | the Host config route must answer before either renders; `useConfig()` starts `null` so the unselected seat never flashes |
+| The turn's tool calls | standard prop `useChat` → `snapshot.locations.getTurn(turnNumber)` + `snapshot.nodes.get(key)` | a `tool-call` node's `data.root` is either a preparing/start call or a settled `{ kind: 'tool-result', name, content, … }`; content blocks are plain `{ type: 'text', text }` |
+| The job label | `JobView.label` on every roster row | a producer registers it; `dsh-tool-bash` registers the exact command line, and `detail` carries `exit code: N` after settlement |
+
+The turn tail exists only for a **completed** turn, so a job started by a still
+running turn gets its inline card when the turn closes; the session-header job
+list covers the meantime.
+
 ## The `!` trigger
 
 The slash/@ menu (`@deepseek-ai/dsh-client-ui-input-trigger`) detects only `/`
@@ -81,6 +114,9 @@ exist; the plug restores the originals on unload.
   independent parts in separate `try` blocks or effects.
 - **The menu highlights the first group that settles.** Slow sources lose the
   highlight to fast ones; hold the fast one back briefly if order matters.
+- **`agent/pre-step` gets the claimed batch, not the history.** Shrinking an
+  image there fixes a message that is still entering the session; an image
+  already in the log keeps its size and every later request carries it again.
 - **`agent/pre-step` sees runtime-context messages too.** Strip them only when
   nothing else remains, or the step still sends a request.
 - **Command events are not model history.** Fine for `!` output; if the model

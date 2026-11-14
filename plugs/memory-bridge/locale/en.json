@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Memory Bridge",
+    "description": "Gives every session, on any model, the project's shared memory: the MEMORY.md index Claude Code keeps, and a memory tool that lists, reads, saves and deletes notes in the same plain-Markdown format, so every agent shares one memory. The protocol rides in the system prompt, so it works with any model. Also loads ~/.claude/CLAUDE.md and .claude/rules. Type /memory to see what was found."
+  }
+}

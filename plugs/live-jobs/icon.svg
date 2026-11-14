@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="th3-plug live jobs">
+  <!-- th3-plug live-jobs icon: ink octagon tile, gold stopwatch. A job the agent started, still running. -->
+  <path d="M60.6 38.9 Q60.6 43.9 57.1 47.4 L47.4 57.1 Q43.9 60.6 38.9 60.6 L25.1 60.6 Q20.1 60.6 16.6 57.1 L6.9 47.4 Q3.4 43.9 3.4 38.9 L3.4 25.1 Q3.4 20.1 6.9 16.6 L16.6 6.9 Q20.1 3.4 25.1 3.4 L38.9 3.4 Q43.9 3.4 47.4 6.9 L57.1 16.6 Q60.6 20.1 60.6 25.1 Z" fill="#182028"/>
+  <path d="M56.5 38.1 Q56.5 42.1 53.7 45.0 L45.0 53.7 Q42.1 56.5 38.1 56.5 L25.9 56.5 Q21.9 56.5 19.0 53.7 L10.3 45.0 Q7.5 42.1 7.5 38.1 L7.5 25.9 Q7.5 21.9 10.3 19.0 L19.0 10.3 Q21.9 7.5 25.9 7.5 L38.1 7.5 Q42.1 7.5 45.0 10.3 L53.7 19.0 Q56.5 21.9 56.5 25.9 Z" fill="none" stroke="#C0841F" stroke-width="1.2" opacity="0.6"/>
+  <rect x="27.4" y="14.2" width="9.2" height="3.4" rx="1.7" fill="#F2C33F"/>
+  <path d="M32 17.6 V24.4" stroke="#F2C33F" stroke-width="3.4"/>
+  <path d="M41.6 25.2 L45.2 21.6" stroke="#F2C33F" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="32" cy="36" r="11.6" fill="none" stroke="#F2C33F" stroke-width="3.2"/>
+  <path d="M32 36 V28.6" stroke="#F2C33F" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M32 36 L38.2 32.6" stroke="#F2C33F" stroke-width="2.4" stroke-linecap="round"/>
+</svg>

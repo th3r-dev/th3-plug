@@ -1,0 +1,38 @@
+{
+  "name": "@th3-plug/memory-bridge",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Memory Bridge: gives every session, on any model, the shared project memory. The MEMORY.md index Claude Code keeps, a memory tool that lists, reads, saves and deletes notes in the same plain-Markdown format, ~/.claude/CLAUDE.md and .claude/rules the Harness skips, and a prompt section so the protocol reaches any model on every request.",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "claude-code",
+    "memory",
+    "auto-memory"
+  ],
+  "homepage": "https://github.com/th3r-dev/th3-plug/tree/main/plugs/memory-bridge#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/th3r-dev/th3-plug.git",
+    "directory": "plugs/memory-bridge"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./host/index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "host/*.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

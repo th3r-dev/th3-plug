@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Live jobs",
+    "description": "See the background jobs the agent starts without leaving the conversation: the real command, streaming output, exit status, and a stop button."
+  }
+}

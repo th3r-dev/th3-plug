@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "智能体规则桥接",
+    "description": "自动发现其他编码智能体（Claude Code、Cursor、Copilot、Windsurf、Gemini、Codex）在项目中留下的规则、钩子和设置，并在 Harness 中执行 Claude Code 的钩子和权限规则。输入 /agent-bridge 查看结果。"
+  }
+}

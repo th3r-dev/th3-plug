@@ -1,0 +1,16 @@
+# Loader rows this bundle adds to the profile. A user override of `config`
+# goes in the profile's own cordis.patch.yml under the same `id`.
+- insert:
+    - id: th3-agent-bridge
+      name: '@th3-plug/agent-bridge'
+      config:
+        command: agent-bridge       # report: /agent-bridge [folder]
+        hooks: true                 # run Claude Code command hooks
+        permissions: true           # apply permissions.deny / permissions.ask
+        scopes: [project, local]    # add `user` to also run ~/.claude/settings.json
+        events: [PreToolUse, PostToolUse, PostToolUseFailure, UserPromptSubmit, SessionStart, Stop, SubagentStop, SessionEnd]
+        projects: []                # project roots allowed to run hooks; empty = all
+        timeoutMs: 60000            # per hook, when the hook sets no timeout
+        updatedInput: retry         # retry | ignore
+        loginShell: true            # take PATH from your login shell
+        maxStopContinuations: 3     # Stop hooks may keep an agent going this often in a row

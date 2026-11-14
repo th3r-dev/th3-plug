@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "记忆桥",
+    "description": "让每个会话、任何模型都获得项目的共享记忆：Claude Code 维护的 MEMORY.md 索引，以及按相同纯 Markdown 格式列出、读取、保存和删除笔记的 memory 工具，所有 agent 共用一份记忆。协议随每次请求写入系统提示，因此适用于任何模型。同时加载 ~/.claude/CLAUDE.md 和 .claude/rules。输入 /memory 查看找到的内容。"
+  }
+}

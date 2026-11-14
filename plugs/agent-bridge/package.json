@@ -1,0 +1,38 @@
+{
+  "name": "@th3-plug/agent-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Auto-detect the rules, hooks and settings other coding agents (Claude Code, Cursor, Copilot, Windsurf, Cline, Gemini, Kiro, Codex) keep in a project, and enforce Claude Code hooks and permission rules inside DeepSeek Harness.",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "claude-code",
+    "hooks",
+    "agent-rules"
+  ],
+  "homepage": "https://github.com/th3r-dev/th3-plug/tree/main/plugs/agent-bridge#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/th3r-dev/th3-plug.git",
+    "directory": "plugs/agent-bridge"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./host/index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "host/*.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

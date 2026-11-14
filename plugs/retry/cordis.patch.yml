@@ -1,0 +1,10 @@
+# Loader rows this bundle adds to the profile. A user override of `config`
+# goes in the profile's own cordis.patch.yml under the same `id`.
+- insert:
+    - id: th3-retry
+      name: '@th3-plug/retry'
+      config:
+        maxEdge: 2000       # longest image edge, in pixels, one model request may carry
+        maxBytes: 1048576   # encoded-byte target for one shrunken image
+        shrink: true        # fit oversized request images; off keeps only retry/edit
+        offload: true       # leave an image committed before this plug out of later requests
