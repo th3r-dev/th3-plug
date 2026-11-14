@@ -95,8 +95,9 @@ function stepPlain(state, command, index) {
  */
 export function segments(command) {
   const state = { segments: [], words: [], word: '', quote: undefined, started: false }
-  for (let index = 0; index < command.length; index += 1) {
-    index = state.quote === undefined ? stepPlain(state, command, index) : stepQuoted(state, command, index)
+  let index = 0
+  while (index < command.length) {
+    index = (state.quote === undefined ? stepPlain(state, command, index) : stepQuoted(state, command, index)) + 1
   }
   pushSegment(state)
   return state.segments
@@ -158,7 +159,7 @@ export function repositoryOf(dir) {
 /** The git directory a worktree or submodule `.git` file points at. */
 function worktreeGitDir(current, dotGit) {
   try {
-    const found = /^gitdir:\s*(.+)$/m.exec(readFileSync(dotGit, 'utf8'))
+    const found = /^gitdir:[ \t]*(\S.*)$/m.exec(readFileSync(dotGit, 'utf8'))
     if (found !== null) return resolve(current, found[1].trim())
   } catch { /* unreadable: fall back to the file itself */ }
   return dotGit
@@ -175,7 +176,7 @@ export function branchOf(dir) {
   if (repository === undefined) return undefined
   try {
     const head = readFileSync(join(repository.gitDir, 'HEAD'), 'utf8').trim()
-    const ref = /^ref:\s*refs\/heads\/(.+)$/.exec(head)
+    const ref = /^ref:[ \t]*refs\/heads\/(\S.*)$/.exec(head)
     return ref === null ? 'HEAD' : ref[1]
   } catch {
     return undefined
