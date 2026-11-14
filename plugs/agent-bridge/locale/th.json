@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "สะพานกฎของ agent",
+    "description": "หากฎ hook และ settings ที่ agent ตัวอื่น (Claude Code, Cursor, Copilot, Windsurf, Gemini, Codex) ทิ้งไว้ในแต่ละโปรเจกต์ให้เอง แล้วรัน hook กับ permission rule ของ Claude Code ใน Harness ด้วย พิมพ์ /agent-bridge เพื่อดูว่าเจออะไรบ้าง"
+  }
+}

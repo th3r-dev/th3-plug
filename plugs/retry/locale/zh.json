@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "重试",
+    "description": "在回复下方的操作行加入 重试 和 编辑：重试会带上原图片再次发送上一条提示，编辑可以先改文字再发送。请求离开本机前，超过尺寸上限的图片会被缩放到模型的限制之内，因此不会再出现 \"At least one of the image dimensions exceed max allowed size\"。"
+  }
+}

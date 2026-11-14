@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Retry",
+    "description": "Adds Retry and Edit to the action row under a reply: Retry sends the previous prompt again with its original images, Edit lets you change the text first. Every oversized image is also fitted to the provider's dimension cap before the request leaves the machine, so a tall screenshot no longer fails with \"At least one of the image dimensions exceed max allowed size\"."
+  }
+}

@@ -1,0 +1,10 @@
+# Loader rows this bundle adds to the profile. A user override of `config`
+# goes in the profile's own cordis.patch.yml under the same `id`.
+- insert:
+    - id: th3-live-jobs
+      name: '@th3-plug/live-jobs'
+      config:
+        position: conversation  # conversation = card under the turn; extrabar = strip above the composer
+        previewLines: 8        # output lines shown while a job's output is collapsed
+        maxOutputLines: 500    # newest output lines kept in the expanded view
+        stopConfirmMs: 3000    # window for the two-press stop control

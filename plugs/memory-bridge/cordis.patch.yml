@@ -1,0 +1,17 @@
+# Loader rows this bundle adds to the profile. A user override of `config`
+# goes in the profile's own cordis.patch.yml under the same `id`.
+- insert:
+    - id: th3-memory-bridge
+      name: '@th3-plug/memory-bridge'
+      config:
+        command: memory             # report: /memory [folder]
+        autoMemory: true            # show the shared MEMORY.md index and the rules for keeping it
+        tool: true                  # the `memory` tool: list / read / save / delete notes
+        promptSection: true         # keep the memory protocol in the system prompt (any model, every request)
+        instructions: true          # ~/.claude/CLAUDE.md, ~/.claude/rules, .claude/CLAUDE.md, .claude/rules
+        refresh: true               # announce index lines changed outside the session
+        subagents: false            # Claude Code gives subagents no auto memory either
+        maxIndexLines: 200          # MEMORY.md lines shown (Claude Code's limit)
+        maxIndexBytes: 25000        # MEMORY.md bytes shown (Claude Code's limit)
+        maxInstructionBytes: 65536  # budget for the bridged instruction files
+        projects: []                # project roots to bridge; empty = all

@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Agent rules bridge",
+    "description": "Detects the rules, hooks and settings other coding agents (Claude Code, Cursor, Copilot, Windsurf, Gemini, Codex) left in each project. Runs Claude Code hooks and permission rules here too. Type /agent-bridge to see what was found."
+  }
+}

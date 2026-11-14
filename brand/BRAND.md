@@ -39,6 +39,9 @@ tile with a thin deep-gold ring, and **one gold glyph** for the plug's job
 | Plug | Glyph |
 |---|---|
 | `shell` | `!_` — the bang that runs a command |
+| `agent-bridge` | an arch bridge — rules carried across agents |
+| `memory-bridge` | a note page with a bookmark ribbon — memory kept across agents |
+| `retry` | two chasing arrows — send the same prompt again |
 | template | the plug — replace it in a new plug |
 
 ## Color
