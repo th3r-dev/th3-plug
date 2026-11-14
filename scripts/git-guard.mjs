@@ -15,9 +15,10 @@
  *
  * Everything else passes: `git fetch`, `git pull`, `git switch`, `git status`,
  * `gh pr create` and `gh pr merge` included. A command wrapped in
- * `bash -c "…"` (or `sh` / `zsh -c`) is read as the command it runs. The guard
- * only speaks for the repository that contains it; work in another checkout is
- * none of its business.
+ * `bash -c "…"` (or `sh` / `zsh -c`) is read as the command it runs, and the
+ * branch is found by reading `.git/HEAD` directly. The guard only speaks for
+ * the repository that contains it; work in another checkout is none of its
+ * business.
  *
  * Set `TH3_GIT_GUARD_ROOT` to guard a different repository (the tests use it).
  */
@@ -30,11 +31,61 @@ const PROTECTED = new Set(['main', 'master'])
 /** Subcommands that add or rewrite commits on the branch they run on. */
 const REWRITES = new Set(['commit', 'rebase', 'cherry-pick', 'revert', 'am'])
 const SHELLS = new Set(['sh', 'bash', 'zsh', 'dash', 'ksh'])
-const GLOBAL_OPTIONS_WITH_VALUE = new Set(['-c', '--exec-path', '--namespace'])
+const GIT_OPTIONS_WITH_VALUE = new Set(['-c', '--exec-path', '--namespace'])
 const SCRIPT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const MAX_NESTING = 2
 
 const real = (path) => { try { return realpathSync(path) } catch { return path } }
+const isGitWord = word => word === 'git' || word.endsWith('/git')
+const blocked = reason => ({ allowed: false, reason })
+
+// ---------------------------------------------------------------- parsing
+
+function pushWord(state) {
+  if (!state.started) return
+  state.words.push(state.word)
+  state.word = ''
+  state.started = false
+}
+
+function pushSegment(state) {
+  pushWord(state)
+  if (state.words.length > 0) state.segments.push(state.words)
+  state.words = []
+}
+
+/** Consume one character inside a quoted word; returns the new index. */
+function stepQuoted(state, command, index) {
+  const char = command[index]
+  if (char === state.quote) { state.quote = undefined; return index }
+  if (char === '\\' && state.quote === '"' && index + 1 < command.length) {
+    state.word += command[index + 1]
+    return index + 1
+  }
+  state.word += char
+  state.started = true
+  return index
+}
+
+/** Consume one character outside quotes; returns the new index. */
+function stepPlain(state, command, index) {
+  const char = command[index]
+  if (char === "'" || char === '"') { state.quote = char; state.started = true; return index }
+  if (char === '\\' && index + 1 < command.length) {
+    state.word += command[index + 1]
+    state.started = true
+    return index + 1
+  }
+  if (char === ' ' || char === '\t') { pushWord(state); return index }
+  if (char === '\n' || char === ';') { pushSegment(state); return index }
+  if (char === '|' || char === '&') {
+    pushSegment(state)
+    return command[index + 1] === char ? index + 1 : index
+  }
+  state.word += char
+  state.started = true
+  return index
+}
 
 /**
  * Split a shell command into segments of words, so `cd x && git commit` and
@@ -43,35 +94,12 @@ const real = (path) => { try { return realpathSync(path) } catch { return path }
  * @returns {string[][]} one word list per command segment.
  */
 export function segments(command) {
-  const out = []
-  let words = []
-  let word = ''
-  let quote
-  let started = false
-  const pushWord = () => { if (started) { words.push(word); word = ''; started = false } }
-  const pushSegment = () => { pushWord(); if (words.length > 0) { out.push(words); words = [] } }
-  for (let i = 0; i < command.length; i += 1) {
-    const char = command[i]
-    if (quote !== undefined) {
-      if (char === quote) { quote = undefined; continue }
-      if (char === '\\' && quote === '"' && i + 1 < command.length) { word += command[i += 1]; started = true; continue }
-      word += char
-      started = true
-      continue
-    }
-    if (char === "'" || char === '"') { quote = char; started = true; continue }
-    if (char === '\\' && i + 1 < command.length) { word += command[i += 1]; started = true; continue }
-    if (char === ' ' || char === '\t') { pushWord(); continue }
-    if (char === '\n' || char === ';' || char === '|' || char === '&') {
-      pushSegment()
-      if ((char === '|' || char === '&') && command[i + 1] === char) i += 1
-      continue
-    }
-    word += char
-    started = true
+  const state = { segments: [], words: [], word: '', quote: undefined, started: false }
+  for (let index = 0; index < command.length; index += 1) {
+    index = state.quote === undefined ? stepPlain(state, command, index) : stepQuoted(state, command, index)
   }
-  pushSegment()
-  return out
+  pushSegment(state)
+  return state.segments
 }
 
 /**
@@ -80,17 +108,17 @@ export function segments(command) {
  * @returns {{ sub: string, args: string[], dir?: string } | undefined} subcommand, its arguments, and a `-C` directory when the segment names one.
  */
 export function gitInvocation(words) {
-  const at = words.findIndex(word => /(^|\/)git$/.test(word))
+  const at = words.findIndex(isGitWord)
   if (at < 0) return undefined
   const rest = words.slice(at + 1)
   let dir
-  for (let i = 0; i < rest.length; i += 1) {
-    const word = rest[i]
-    if (word === '-C') { dir = rest[i + 1]; i += 1; continue }
+  for (let index = 0; index < rest.length; index += 1) {
+    const word = rest[index]
+    if (word === '-C') { dir = rest[index + 1]; index += 1; continue }
     if (word.startsWith('-C') && word.length > 2) { dir = word.slice(2); continue }
-    if (GLOBAL_OPTIONS_WITH_VALUE.has(word)) { i += 1; continue }
+    if (GIT_OPTIONS_WITH_VALUE.has(word)) { index += 1; continue }
     if (word.startsWith('-')) continue
-    return { sub: word, args: rest.slice(i + 1), ...(dir === undefined ? {} : { dir }) }
+    return { sub: word, args: rest.slice(index + 1), ...(dir === undefined ? {} : { dir }) }
   }
   return undefined
 }
@@ -103,6 +131,8 @@ export function nestedCommand(words) {
   if (flag < 0 || flag + 1 >= words.length) return undefined
   return words[flag + 1]
 }
+
+// ---------------------------------------------------------------- repository
 
 /**
  * Find the working tree and git directory that own `dir`, by walking up to the
@@ -118,17 +148,20 @@ export function repositoryOf(dir) {
     let stat
     try { stat = statSync(dotGit) } catch { stat = undefined }
     if (stat?.isDirectory()) return { root: current, gitDir: dotGit }
-    if (stat?.isFile()) {
-      try {
-        const found = /^gitdir:\s*(.+)$/m.exec(readFileSync(dotGit, 'utf8'))
-        if (found !== null) return { root: current, gitDir: resolve(current, found[1].trim()) }
-      } catch { /* unreadable: treat the directory as a plain folder */ }
-      return { root: current, gitDir: dotGit }
-    }
+    if (stat?.isFile()) return { root: current, gitDir: worktreeGitDir(current, dotGit) }
     const parent = dirname(current)
     if (parent === current) return undefined
     current = parent
   }
+}
+
+/** The git directory a worktree or submodule `.git` file points at. */
+function worktreeGitDir(current, dotGit) {
+  try {
+    const found = /^gitdir:\s*(.+)$/m.exec(readFileSync(dotGit, 'utf8'))
+    if (found !== null) return resolve(current, found[1].trim())
+  } catch { /* unreadable: fall back to the file itself */ }
+  return dotGit
 }
 
 /**
@@ -149,7 +182,9 @@ export function branchOf(dir) {
   }
 }
 
-const hint = branch => [
+// ---------------------------------------------------------------- decision
+
+const branchHint = branch => [
   `Blocked: work happens on a branch, never directly on ${branch}.`,
   'Create one, commit there, push it, then open the PR:',
   '  git switch -c feat/<plug>-<topic>',
@@ -166,17 +201,42 @@ const pushHint = (problem, branch, onProtected) => [
   '  gh pr create --base main --fill',
 ].join('\n')
 
+const pushTarget = ref => {
+  const bare = ref.replace(/^\+/, '')
+  const target = bare.includes(':') ? bare.split(':').slice(1).join(':') : bare
+  return target.replace(/^refs\/heads\//, '')
+}
+
+/** Why a push is not allowed, or undefined when it is. */
 function pushProblem({ sub, args }, branch, onProtected) {
   if (args.includes('--all') || args.includes('--mirror')) return `\`git ${sub} ${args.join(' ')}\` would update main or master`
   const refs = args.filter(arg => !arg.startsWith('-')).slice(1)
   if (refs.length === 0) return onProtected ? `this branch is ${branch}` : undefined
   for (const ref of refs) {
-    const bare = ref.replace(/^\+/, '')
-    const target = (bare.includes(':') ? bare.split(':').slice(1).join(':') : bare).replace(/^refs\/heads\//, '')
+    const target = pushTarget(ref)
     if (PROTECTED.has(target)) return `this push targets ${target}`
     if ((target === 'HEAD' || target === '@') && onProtected) return `HEAD is ${branch}`
   }
   return undefined
+}
+
+/** The decision for one segment, when it runs git in the guarded repository. */
+function gitDecision(words, dir, guarded) {
+  const git = gitInvocation(words)
+  if (git === undefined) return undefined
+  const base = git.dir === undefined ? dir : real(resolve(dir, git.dir))
+  const repository = repositoryOf(base)
+  if (repository === undefined || repository.root !== guarded) return undefined
+  const branch = branchOf(base)
+  if (branch === undefined || branch === 'HEAD') return undefined
+  const onProtected = PROTECTED.has(branch)
+  if (onProtected && REWRITES.has(git.sub)) return blocked(branchHint(branch))
+  if (onProtected && git.sub === 'merge' && !git.args.includes('--ff-only')) {
+    return blocked(`${branchHint(branch)}\nA fast-forward merge (\`git merge --ff-only\`) is allowed.`)
+  }
+  if (git.sub !== 'push') return undefined
+  const problem = pushProblem(git, branch, onProtected)
+  return problem === undefined ? undefined : blocked(pushHint(problem, branch, onProtected))
 }
 
 /** Inspect one command line. `depth` bounds `bash -c` recursion. */
@@ -187,28 +247,14 @@ function inspect(command, startDir, guarded, depth) {
       dir = real(isAbsolute(words[1]) ? words[1] : resolve(dir, words[1]))
       continue
     }
-    const inner = nestedCommand(words)
-    if (inner !== undefined && depth < MAX_NESTING) {
-      const decision = inspect(inner, dir, guarded, depth + 1)
+    const nested = nestedCommand(words)
+    if (nested !== undefined && depth < MAX_NESTING) {
+      const decision = inspect(nested, dir, guarded, depth + 1)
       if (!decision.allowed) return decision
       continue
     }
-    const git = gitInvocation(words)
-    if (git === undefined) continue
-    const base = git.dir === undefined ? dir : real(resolve(dir, git.dir))
-    const repository = repositoryOf(base)
-    if (repository === undefined || repository.root !== guarded) continue
-    const branch = branchOf(base)
-    if (branch === undefined || branch === 'HEAD') continue
-    const onProtected = PROTECTED.has(branch)
-    if (onProtected && REWRITES.has(git.sub)) return { allowed: false, reason: hint(branch) }
-    if (onProtected && git.sub === 'merge' && !git.args.includes('--ff-only')) {
-      return { allowed: false, reason: `${hint(branch)}\nA fast-forward merge (\`git merge --ff-only\`) is allowed.` }
-    }
-    if (git.sub === 'push') {
-      const problem = pushProblem(git, branch, onProtected)
-      if (problem !== undefined) return { allowed: false, reason: pushHint(problem, branch, onProtected) }
-    }
+    const decision = gitDecision(words, dir, guarded)
+    if (decision !== undefined) return decision
   }
   return { allowed: true }
 }
@@ -221,7 +267,8 @@ function inspect(command, startDir, guarded, depth) {
  */
 export function evaluate(payload, { root = process.env.TH3_GIT_GUARD_ROOT || SCRIPT_ROOT } = {}) {
   if (payload?.tool_name !== 'Bash') return { allowed: true }
-  const command = String(payload.tool_input?.command ?? '')
+  const raw = payload.tool_input?.command
+  const command = typeof raw === 'string' ? raw : ''
   if (!command.includes('git')) return { allowed: true }
   const guarded = real(resolve(root))
   return inspect(command, real(resolve(payload.cwd || process.cwd())), guarded, 0)
