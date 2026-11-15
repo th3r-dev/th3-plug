@@ -226,6 +226,7 @@ test('T-17 apply registers exactly one listener and one command without optional
   assert.ok(seen.listeners['tools/post-execute'])
   assert.equal(seen.commands.length, 1)
   assert.equal(seen.commands[0].name, 'cost')
+  assert.ok(seen.commands[0].input?.hint, 'command input hint must not be empty (activation rejects empty hints)')
 })
 
 // --- T-18: surrogate-pair edge ---------------------------------------------------

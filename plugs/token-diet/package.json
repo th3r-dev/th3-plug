@@ -1,6 +1,6 @@
 {
   "name": "@th3-plug/token-diet",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Bounds tool results at first delivery to cut input tokens; /cost reports the savings.",
   "license": "MIT",

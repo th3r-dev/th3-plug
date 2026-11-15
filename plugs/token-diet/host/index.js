@@ -65,7 +65,7 @@ export function apply(ctx, config = {}) {
     yield ctx.commands.register({
       name: options.command,
       description: 'Token Diet: report input tokens saved by trimming tool results at first delivery.',
-      input: { hint: '' },
+      input: { hint: '[report]' },
       handler: async () => ({ kind: 'success', text: report(stats, options, hasSpill(ctx)) }),
     })
 
