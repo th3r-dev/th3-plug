@@ -280,3 +280,38 @@ test('T-20 the trim path needs no LLM service and only awaits the spill save', a
   assert.equal(out.kind, 'accept')
   assert.equal(seen.spillCalls.length, 1)
 })
+
+// --- Web half: the report parser that drives the /cost card --------------------
+// client.js calls window.__ModuleLoader__.load at import time; stub the loader
+// so the module can be imported under node:test, then use its parseReport.
+test('T-21 parseReport reads the stable report lines for the chat card', async () => {
+  globalThis.window = { __ModuleLoader__: { load: () => {} } }
+  try {
+    const { parseReport } = await import('../web/client.js')
+    const report = [
+      'Token Diet — since load:',
+      '  tool results seen: 1,204',
+      '  trimmed: 388 (32%)',
+      '  tool-result chars: 1,938,002 → 801,071 — saved 1,136,931 (59%)',
+      '  est. tokens saved: 284,233 (4 chars/token heuristic)',
+      '  config: max 2,000 chars (head 1,500 / tail 400)',
+    ].join('\n')
+    const parsed = parseReport(report)
+    assert.equal(parsed.seen, 1204)
+    assert.equal(parsed.trimmed, 388)
+    assert.equal(parsed.trimmedPct, 32)
+    assert.equal(parsed.charsSaved, 1136931)
+    assert.equal(parsed.savedPct, 59)
+    assert.equal(parsed.tokens, 284233)
+    assert.deepEqual(parsed.config, { max: '2,000', head: '1,500', tail: '400' })
+    assert.equal(parsed.note, undefined)
+    // Without a spill backend the note line appears and must reach the card.
+    const withNote = parseReport(`${report}\n  note: no spill backend mounted — oversized results are kept inline (nothing is trimmed).`)
+    assert.match(withNote.note, /no spill backend mounted/)
+    // Unknown format → undefined → the card falls back to the raw text.
+    assert.equal(parseReport('something else entirely'), undefined)
+    assert.equal(parseReport(undefined), undefined)
+  } finally {
+    delete globalThis.window
+  }
+})

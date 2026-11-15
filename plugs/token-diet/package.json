@@ -1,6 +1,6 @@
 {
   "name": "@th3-plug/token-diet",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "description": "Bounds tool results at first delivery to cut input tokens; /cost reports the savings.",
   "license": "MIT",
@@ -8,11 +8,13 @@
   "exports": {
     ".": "./host/index.js",
     "./locale/*.json": "./locale/*.json",
-    "./icon": "./icon.svg"
+    "./icon": "./icon.svg",
+    "./client": "./web/client.js"
   },
   "files": [
     "host/*.js",
     "cordis.patch.yml",
+    "web/client.js",
     "locale/*.json",
     "icon.svg",
     "README.md"
@@ -20,6 +22,13 @@
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ]
     }
   }
 }

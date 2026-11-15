@@ -21,7 +21,11 @@ This is a proof-of-concept: see `SRS.md` and `TEST_PLAN.md` at the repo root.
 
 ## Use
 
-Type `/cost` in the chat box to see counters since the app started:
+Type `/cost` in the chat box and the report appears as a **stat card** in the
+conversation — results seen, trimmed count and percentage, characters saved
+with a savings bar, estimated tokens saved, and the active config — with a
+Copy button for the raw text. The card is presentation only: the command is
+never model-visible.
 
 ```
 Token Diet — since load:
@@ -44,6 +48,66 @@ An oversized result becomes head + marker + tail:
 
 …last 400 characters…
 ```
+
+### Example use case: a long `web_fetch` result
+
+A tool call fetches a paginated JSON list — 60 rows plus an error line at the
+end — and comes back as a 7,733-character tool result. Without the plug, every
+later request in the session carries all 7,733 characters again (~1,934
+estimated tokens of the tool-result class, per the meter's 4-chars/token
+heuristic).
+
+**Input** (what the tool produced, abridged here — the plug sees all of it):
+
+```json
+HTTP/1.1 200 OK
+{
+  "items": [
+    {"id": 1000, "name": "row-0", "status": "ok", "payload": "xxxx…"},
+    {"id": 1001, "name": "row-1", "status": "ok", "payload": "xxxx…"},
+    … 58 more rows …
+    {"id": 1059, "name": "row-59", "status": "ok", "payload": "xxxx…"}
+  ],
+  "error": "E431 rate limit reached for product code 154",
+  "request_id": "req_8f3a"
+}
+```
+
+**Output** (what the model receives, 2,000 characters — real plug output):
+
+```
+HTTP/1.1 200 OK
+{
+  "items": [
+    {"id": 1000, "name": "row-0", "status": "ok", "payload": "xxxx…"},
+    {"id": 1001, "name": "row-1", "status": "ok", "payload": "xxxx…"},
+    … head keeps the first ~1,485 characters …
+
+[... token-diet: omitted 5,733 of 7,733 chars; full result: /Users/th33raphat/.dsh/attachments/spill/session-04cc…/web_fetch.txt — Use read with offset/limit, or grep this path to search within it. ...]
+
+    {"id": 1059, "name": "row-59", "status": "ok", "payload": "xxxx…"}
+  ],
+  "error": "E431 rate limit reached for product code 154",
+  "request_id": "req_8f3a"
+}
+```
+
+The head keeps the response start, the tail keeps the last rows **and the
+error line** — the part the agent usually needs — and the marker names the
+spill file holding every omitted byte. If the model decides it needs a middle
+row, it calls `read` on the locator with `offset`/`limit` (or `grep`s the
+path); nothing is lost.
+
+**Usage, this one result** (4-chars/token heuristic):
+
+| | Before | After | Saved |
+|---|---|---|---|
+| Chars sent per request | 7,733 | 2,000 | 5,733 (74%) |
+| Est. tokens per request | ~1,937 | ~504 | ~1,433 |
+| × remaining steps in the session | — | — | multiplies |
+
+The full original also went to the spill file (7,733 bytes), so the bounded
+preview plus locator is the only thing that ever enters the session log.
 
 Results that pass through untouched: `read` results (they are the recovery
 loop for spill files), results with images (the built-in spill policy owns
@@ -73,6 +137,7 @@ an error.
 | File | Runs in | Role |
 |---|---|---|
 | `host/index.js` | Harness process | the `tools/post-execute` listener and the `/cost` command |
+| `web/client.js` | Harness page | the `/cost` stat card in the conversation (`conversation.chat.commandview`) |
 | `cordis.patch.yml` | Loader | the row this bundle inserts |
 | `locale/*.json`, `icon.svg` | Plugin manager | title, description, icon |
 
