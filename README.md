@@ -19,6 +19,7 @@
 | Plug | What it does |
 |---|---|
 | <img src="plugs/shell/icon.svg" width="20" height="20" alt="" align="top">&nbsp;[**shell**](plugs/shell/README.md) | Run a command on your machine from the chat box with `!git status` or `/sh git status`. The AI agent is never called. zsh completions and shell history pop up while you type; the output comes back as a terminal block with the exit code and a Copy button. Package `@th3-plug/shell`. |
+| <img src="plugs/token-diet/icon.svg" width="20" height="20" alt="" align="top">&nbsp;[**token-diet**](plugs/token-diet/README.md) | Cut input tokens: bounds every tool result at first delivery to a head, a marker and a tail, keeps the complete original in a spill file, and `/cost` reports the savings to you — never to the model. Proof-of-concept, spec in `SRS.md`. Package `@th3-plug/token-diet`. |
 
 ## Quick start
 
