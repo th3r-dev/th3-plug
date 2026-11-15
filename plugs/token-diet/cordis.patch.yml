@@ -1,0 +1,10 @@
+# Loader rows this bundle adds to the profile. A user override of `config`
+# goes in the profile's own cordis.patch.yml under the same `id`.
+- insert:
+    - id: th3-token-diet
+      name: '@th3-plug/token-diet'
+      config:
+        command: cost
+        maxResultChars: 2000
+        headChars: 1500
+        tailChars: 400
