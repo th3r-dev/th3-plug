@@ -1,0 +1,39 @@
+{
+  "name": "@th3-plug/image-reconcile",
+  "version": "0.2.1",
+  "private": true,
+  "description": "Keep only the newest images a model route allows in a session's model history: before each request, older images become the Harness's omitted-image note. The budget is resolved per route from config, a user-triggered probe, provider docs, or the fallback.",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "image",
+    "context",
+    "offload"
+  ],
+  "homepage": "https://github.com/th3r-dev/th3-plug/tree/main/plugs/image-reconcile#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/th3r-dev/th3-plug.git",
+    "directory": "plugs/image-reconcile"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./host/index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "host/*.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "assets/*.png",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

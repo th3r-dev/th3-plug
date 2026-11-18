@@ -19,6 +19,7 @@
 | Plug | What it does |
 |---|---|
 | <img src="plugs/shell/icon.svg" width="20" height="20" alt="" align="top">&nbsp;[**shell**](plugs/shell/README.md) | Run a command on your machine from the chat box with `!git status` or `/sh git status`. The AI agent is never called. zsh completions and shell history pop up while you type; the output comes back as a terminal block with the exit code and a Copy button. Package `@th3-plug/shell`. |
+| <img src="plugs/image-reconcile/icon.svg" width="20" height="20" alt="" align="top">&nbsp;[**image-reconcile**](plugs/image-reconcile/README.md) | Keep only the newest images a model route allows in the model history: before every request, older pictures become the Harness's omitted-image note, so a route with an 8-image cap stops failing every turn and routes with more lose nothing. The budget is resolved per route — config, `/imagereconcile probe`, provider docs, or an observed cap — and a route with no known budget is left alone. Package `@th3-plug/image-reconcile`. |
 
 ## Quick start
 
