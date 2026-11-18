@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Image Reconcile",
+    "description": "Keeps only the newest images a model route allows in a session's model history: before every request, older images become the Harness's omitted-image note. The budget is resolved per route from config, a user-triggered probe, provider docs, or the fallback, so routes with an 8-image limit stop failing every turn and routes with none lose nothing."
+  }
+}

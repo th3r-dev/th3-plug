@@ -1,0 +1,12 @@
+# Loader rows this bundle adds to the profile. A user override of `config`
+# goes in the profile's own cordis.patch.yml under the same `id`.
+- insert:
+    - id: th3-image-reconcile
+      name: '@th3-plug/image-reconcile'
+      config:
+        enabled: true
+        limits: {}            # override a budget: provider or provider/model,
+                              # e.g.  limits: { tokenme: 8 }
+        defaultLimit: 0       # 0 leaves routes with no known budget alone
+        command: imagereconcile
+        probeTimeoutMs: 60000 # abort budget for one probe request
